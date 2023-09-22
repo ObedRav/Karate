@@ -2,7 +2,7 @@ Feature: Get users from an API
 
 Scenario: Get a list of users from an reqres.in
     Given url "https://reqres.in/api/users?page=2"
-    When method GET
+    When method POST
     Then status 200
 
 Scenario: Get a specific user from an reqres.in
