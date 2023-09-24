@@ -1,4 +1,4 @@
-Feature: Using get request
+Feature: Using get requests
 
 Background:
     * url 'https://reqres.in/'
