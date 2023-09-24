@@ -3,7 +3,7 @@ Feature: Using get request
 Background:
     * url 'https://reqres.in/'
 
-Scenario: Get a list of users from an reqres.in
+Scenario: Get a list of users
     Given param page = 2
     And path 'api/users'
     When method GET
@@ -38,8 +38,35 @@ Scenario: Get a list of users from an reqres.in
     }
     """
 
-Scenario: Get a specific user from an reqres.in
-    Given url "https://reqres.in/api/users/2"
+Scenario: Get a specific user
+    Given path 'api/users/3'
     When method GET
     Then status 200
-    Then match response == {"data":{"id":2,"email":"janet.weaver@reqres.in","first_name":"Janet","last_name":"Weaver","avatar":"https://reqres.in/img/faces/2-image.jpg"},"support":{"url":"https://reqres.in/#support-heading","text":"To keep ReqRes free, contributions towards server costs are appreciated!"}}
+
+    * def dataSchema =
+    """
+    {
+        id: '#number',
+        email: '#string',
+        first_name: '#string',
+        last_name: '#string',
+        avatar: '#string'
+    }
+    """
+
+    Then match response ==
+    """
+    {
+        'data': #(dataSchema),
+        'support': {
+            'url': #string,
+            'text': #string
+        }
+    }
+    """
+
+Scenario: Get a single user not found
+    Given path 'api/users/23'
+    When method GET
+    Then status 404
+    And match response == {}
